@@ -1,6 +1,6 @@
 # Import Python packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
+#from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 # Set the app title and instructions
@@ -11,7 +11,8 @@ st.write("Choose the fruits you want in your custom Smoothie!")
 name_on_order = st.text_input("Name on Smoothie:")
 if name_on_order:
     st.write(f"The name on your Smoothie will be: **{name_on_order}**")
-
+cnx=st.connection("snowflake")
+session =cnx.session()
 # Get current Snowflake session
 session = get_active_session()
 
