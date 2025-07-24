@@ -39,10 +39,12 @@ if ingredients_list:
         response = requests.get(fruityvice_url)
 
         if response.status_code == 200:
-            st.subheader(f"{fruit_chosen} Nutrition Information")
-            st.dataframe(data=response.json(), use_container_width=True)
+           st.subheader(f"{fruit_chosen} Nutrition Information")
+           st.dataframe(data=response.json(), use_container_width=True)
         else:
-            st.warning(f"Could not fetch info for {fruit_chosen}")
+           st.subheader(f"{fruit_chosen} Nutrition Information")
+           st.info(f"Nutrition info not found in Fruityvice. This fruit may not be available in the API (e.g., Ximenia).")
+
 
     # Build SQL statement
     my_insert_stmt = f"""
