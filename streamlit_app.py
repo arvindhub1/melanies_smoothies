@@ -39,5 +39,5 @@ if st.button("Submit Order"):
         st.success(f"✅ Your Smoothie is ordered, {name_on_order}!")
 
 
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+smoothiefroot_response = requests.get("https://fruityvice.com/api/fruit/")
 st.text(smoothiefroot_response)
