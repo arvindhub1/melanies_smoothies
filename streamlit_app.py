@@ -14,7 +14,7 @@ if name_on_order:
 cnx=st.connection("snowflake")
 session =cnx.session()
 # Get current Snowflake session
-session = get_active_session()
+#session = get_active_session()
 
 # Get fruit options
 fruit_df = session.table("smoothies.public.fruit_options").select(col("FRUIT_NAME"))
