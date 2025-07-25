@@ -31,22 +31,28 @@ ingredients_list = st.multiselect(
 if ingredients_list:
     ingredients_string = ', '.join(ingredients_list)
 
-    # Show nutrition info
+    # Show nutrition info for each selected fruit
     for fruit_chosen in ingredients_list:
-        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.subheader(f"{fruit_chosen} Nutrition Information")
+        # Safe lookup of search_on value
+        matching_row = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON']
+        if not matching_row.empty:
+            search_on = matching_row.iloc[0]
+            st.subheader(f"{fruit_chosen} Nutrition Information")
 
-        try:
-            response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_on.lower())
-            if response.status_code == 200:
-                nutrition_df = pd.json_normalize(response.json())
-                st.dataframe(nutrition_df, use_container_width=True)
-            else:
-                st.warning(f"Could not fetch info for {fruit_chosen}")
-        except Exception as e:
-            st.error(f"Error fetching data for {fruit_chosen}: {e}")
+            try:
+                # Call the SmoothieFroot API using lowercase search term
+                response = requests.get("https://my.smoothiefroot.com/api/fruit/" + search_on.lower())
+                if response.status_code == 200:
+                    nutrition_df = pd.json_normalize(response.json())
+                    st.dataframe(nutrition_df, use_container_width=True)
+                else:
+                    st.warning(f"Could not fetch info for {fruit_chosen} (Status code: {response.status_code})")
+            except Exception as e:
+                st.error(f"Error fetching data for {fruit_chosen}: {e}")
+        else:
+            st.warning(f"No search mapping found for {fruit_chosen}")
 
-    # Insert order into database
+    # Submit order to Snowflake
     time_to_insert = st.button('Submit order')
 
     if time_to_insert:
